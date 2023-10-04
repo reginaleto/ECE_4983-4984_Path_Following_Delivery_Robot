@@ -62,7 +62,7 @@
 5. Click 'Preview Pull Request' button
 6. Create pull request 
 
-** PULL = PUSH in this case**
+**PULL = PUSH in this case**
 
 ### With GIT
 1. In Terminal, open at the file in which you saved this repository
