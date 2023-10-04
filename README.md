@@ -58,6 +58,11 @@
 1. Add Summary Describing your Changes
 2. Add Useful/Descriptive Caption to Commit
 3. Click "Commit to 'branch'" Button
+4. Click 'Pull Origin' button
+5. Click 'Preview Pull Request' button
+6. Create pull request 
+
+** PULL = PUSH in this case**
 
 ### With GIT
 1. In Terminal, open at the file in which you saved this repository
