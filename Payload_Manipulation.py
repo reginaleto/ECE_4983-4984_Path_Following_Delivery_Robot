@@ -1,4 +1,4 @@
-import RPi.GPIO
+# import RPi.GPIO
 
 def Motor_init(): 
 
@@ -16,5 +16,5 @@ def Main():
 
   
 
-
+def Main(self):
   
