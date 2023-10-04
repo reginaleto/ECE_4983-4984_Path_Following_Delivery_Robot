@@ -18,15 +18,16 @@
 
 ## Making Sure You're on Your Own Branch
 
-## In Github Deskop
+### In Github Deskop
 1. Ensure your name is included under 'Current Branch' dropdown
 
 ### With GIT
 1. In Terminal, open at the file in which you saved this repository
 2. For Windows, Right Click on file location for repository, select 'Git Bash Here' (likely under More Options)
 3. 'git checkout 'name of your branch'
-    - EX: git checkout Gina
-    -     git checkout Yehya
+**EX:**
+    - git checkout Gina
+    - git checkout Yehya
 
 ## Updating your Branch with Current Code
 
