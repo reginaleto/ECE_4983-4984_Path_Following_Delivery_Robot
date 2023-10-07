@@ -24,12 +24,33 @@ def Barcode_Decode():
     for i in d: 
         #print(i.data.decode('utf-8'))
         barcode_id = i.data.decode('utf-8')
-        print(barcode_id)
+        # print(type(barcode_id)) -- determine the type of the barcode ID *** 
 
     return barcode_id
     
-# def Instruction_Algorithm(barcode_id):
-    
+def Instruction_Algorithm( self ):
+    if self.Payload_Color == 'red':
+        if self.ID == 1:
+            print("Color is red. ID is X. Turn Left.")
+        elif self.ID == 2: 
+            print("Color is red. ID is Y. Turn Right.")
+        elif self.ID == 3: 
+            print("Color is red. ID is Z. Keep Straight.")
+    if self.Payload_Color == 'blue':
+        if self.ID == 1:
+            print("Color is blue. ID is X. Keep Straight.")
+        elif self.ID == 2: 
+            print("Color is blue. ID is Y. Turn Left.")
+        elif self.ID == 3: 
+            print("Color is blue. ID is Z. Turn Right.")
+        
+    if self.Payload_Color == 'green': 
+        if self.ID == 1:
+            print("Color is green. ID is X. Turn Right.")
+        elif self.ID == 2: 
+            print("Color is green. ID is Y. Keep Straight.")
+        elif self.ID == 3: 
+            print("Color is green. ID is Z. Turn Left.")       
     
     
 def Camera_Disable(camera):
@@ -38,11 +59,14 @@ def Camera_Disable(camera):
 
 
 def Main(self):
+    # Motor_Control.Stop_Movement() -- either here or Sensor_Integration for Reflectance Sensors
+    
     camera = Picamera2()
     Camera_Enable(camera)
     Camera_Disable(camera)
 
     self.ID = Barcode_Decode()
+    Instruction_Algorithm(self)
 
 
 if __name__ == '__main__':

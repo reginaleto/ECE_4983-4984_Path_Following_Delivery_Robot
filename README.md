@@ -15,7 +15,6 @@
 
 **Specific Instructions:** https://docs.github.com/en/authentication/connecting-to-github-with-ssh
 
-
 ## Making Sure You're on Your Own Branch
 
 ### In Github Deskop
