@@ -17,4 +17,8 @@ def Main():
   
 
 def Main(self):
+
+
+if __name__ == '__main__':
+    Main()
   

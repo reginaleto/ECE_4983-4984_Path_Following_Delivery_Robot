@@ -23,3 +23,14 @@ https://docs.github.com/en/get-started/writing-on-github/getting-started-with-wr
 
 ### **Important Notes**
 * Found that RPi.GPIO, Picamera2 libraries can only work on Linux systems
+
+
+### **October 6, 2023**
+### **Changes by:** Gina
+
+### **Additions/Accomplishments**
+* Added calls to Main in each file individually
+* Completed Streaming.py based on Excursion #2
+* Updated Instruction_Decode.py to include init and disable of camera, barcode capture, and barcode decode
+* Completed Barcode_Gen.py for basic barcode generation (one at a time, hardcoded)
+* Implemented algorithm prototype for instruction assignments based on barcode ID and payload color
