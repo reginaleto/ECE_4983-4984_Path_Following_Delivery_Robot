@@ -9,5 +9,6 @@ import Sensor_Integration as Input
 class System(Streaming.Streaming_GUI):
     def __init__(self):
         self.Payload_Color = ''
+        self.ID = ''
         
     def Start_System()
