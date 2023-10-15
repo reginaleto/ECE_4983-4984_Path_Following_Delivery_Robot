@@ -1,5 +1,8 @@
 import picamera2
-import cv2
+import cv2 import numpy
+import time
+
+
 
 def Detect_Red():   
     
