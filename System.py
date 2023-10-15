@@ -6,17 +6,19 @@ import Instruction_Decode as Barcode
 
 
 
-# class System(Streaming.Streaming_GUI):
 class System():
-    def __init__(self):
-        self.Payload_Color = 'green'
-        self.ID = ''
-            
-        #def Start_System():
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.Payload_Color = None
+        # initialization 
+        self.ID = None
+        
+        
+    #def Start_System():
     
     def Main(self):
         Barcode.Main(self) # -- to test, but not yet complete
         
-
-System.Main()
+    if __name__ == '__main__':
+        Main()
     
