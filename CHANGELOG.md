@@ -8,7 +8,6 @@ https://docs.github.com/en/get-started/writing-on-github/getting-started-with-wr
 # Path Following Delivery Robot
 ## Log of Changes throughout Duration of Project
 
-
 ### **October 4, 2023**
 ### **Changes by:** Gina
 

@@ -1,0 +1,20 @@
+1st function being executed: Payload Detection
+
+Payload Detection returns color of payload detected
+self.Payload_Color = Detected_Color()
+
+EX: self.Payload_Color = "Blue" --- STEP 1
+STEP 2 --- Run Payload_Manipulation()
+STEP 2.1 --- Lift up Forklift (only enough to make sure it can fit into the pallet)
+STEP 3 --- Run Motor_Control.Move_Forward() into the pallet
+STEP 4 --- Run Payload_Manipulation.Bring_Up()
+--- HAS PALLET
+--- KNOWS COLOR
+
+STEP 5 --- Run Motor_Control.Move_Forward() along the line
+STEP 5.1 --- turn on IR sensors, Reflectance Sensors to start taking in data
+
+
+
+AT UNLOADING --- all checkpoints have same barcode ID 
+-- when ending barcode is reached, stop, take pic of barcode, get barcode id, then drop Payload_Manipulation
