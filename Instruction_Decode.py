@@ -36,7 +36,7 @@ def Barcode_Decode():
 def Instruction_Algorithm( self ):
 
     # first barcode in path -- main intersection
-    if '1' in self.ID:
+    if '16' in self.ID: # 16 b/c extra char at end of barcode
         if self.Payload_Color != None: 
             if self.Payload_Color == 'red':
                 # Motor_Control.Turn_Left()
@@ -100,7 +100,7 @@ def Instruction_Algorithm( self ):
         
     # barcode at loading station 
     # is bypassed the first scan b/c no need to do anything when first payload is already picked up
-    elif '6' in self.ID: 
+    elif '66' in self.ID: # 66 to decipher between barcodes 1 and 6
         if scan_count > 1: 
             # Payload_Detect()
             # Payload_Manipulation.Bring_Up()
