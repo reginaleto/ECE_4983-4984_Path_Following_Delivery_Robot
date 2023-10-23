@@ -5,8 +5,11 @@ from PIL import Image
 import numpy as np
 import time
 
+# first barcode scanned should be loading station barcode
+# first scan of loading station should be bypassed 
+scan_count = 0
+
 def Camera_Enable(camera):
-    
     config = camera.create_preview_configuration()
     camera.configure(config)
     camera.start_preview(Preview.QTGL)
@@ -26,34 +29,85 @@ def Barcode_Decode():
         barcode_id = i.data.decode('utf-8')
         # print(type(barcode_id)) # -- determine the type of the barcode ID *** 
         # print('\n' + barcode_id)
+    
+    scan_count = scan_count + 1 
     return barcode_id
     
-def Instruction_Algorithm( color, barcode_id ):
+def Instruction_Algorithm( self ):
 
-    if color == 'red':
-        if '1' in barcode_id:
-            print("Color is red. ID is 1. Turn Left.")
-        elif '2' in barcode_id: 
-            print("Color is red. ID is 2. Turn Right.")
-        elif '3' in barcode_id: 
-            print("Color is red. ID is 3. Keep Straight.")
-    
-    if color == 'blue':
-        if '1' in barcode_id:
-            print("Color is blue. ID is 1. Keep Straight.")
-        elif '2' in barcode_id: 
-            print("Color is blue. ID is 2. Turn Left.")
-        elif '3' in barcode_id: 
-            print("Color is blue. ID is 3. Turn Right.")
+    # first barcode in path -- main intersection
+    if '1' in self.ID:
+        if self.Payload_Color != None: 
+            if self.Payload_Color == 'red':
+                # Motor_Control.Turn_Left()
+            elif self.Payload_Color == 'blue': 
+                # Motor_Control.Turn_Left()
+            elif self.Payload_Color == 'green': 
+                # Motor_Control.Keep_Straight()
+        elif self.Payload_Color == None: 
+            if self.Previous_Color == 'green': 
+                # Motor_Control.Keep_Straight()
+            if self.Previous_Color == 'red' or self.Previous_Color == 'blue': 
+                # Motor_Control.Turn_Right()
+
+    # barcode labeled #2
+    elif '2' in self.ID: 
+        if self.Payload_Color != None: 
+            if self.Payload_Color == 'red':
+                # Motor_Control.Turn_Right()
+            elif self.Payload_Color == 'blue': 
+                # Motor_Control.Turn_Right()
+            elif self.Payload_Color == 'green': 
+                # Motor_Control.Turn_Right()
+        elif self.Payload_Color == None: 
+            # Motor_Control.Turn_Left()
+                
+    # barcode labeled #3 
+    elif '3' in self.ID: 
+        if self.Payload_Color != None: 
+            if self.Payload_Color == 'red':
+                # Motor_Control.Turn_Left()
+            elif self.Payload_Color == 'blue': 
+                # Motor_Control.Turn_Left()
+            elif self.Payload_Color == 'green': 
+                # do nothing
+                pass
+        elif self.Payload_Color == None: 
+                # Motor_Control.Turn_Right()
+                
+    # barcode labeled #4 -- intersection for blue and red          
+    elif '4' in self.ID: 
+        if self.Payload_Color != None: 
+            if self.Payload_Color == 'red':
+                # Motor_Control.Turn_Left()
+            elif self.Payload_Color == 'blue': 
+                # Motor_Control.Turn_Right()
+            elif self.Payload_Color == 'green': 
+                # do nothing
+                pass
+        elif self.Payload_Color == None: 
+                if self.Previous_Color == 'blue': 
+                    # Motor_Control.Turn_Left()
+                elif self.Previous_Color == 'red': 
+                    # Motor_Control.Turn_Right()
+                
+    # barcode for dropping payload -- in front of each destination         
+    elif '5' in self.ID: 
+        # Payload_Manipulation.Bring_Down()
+        self.Previous_Color = self.Payload_Color 
+        self.Payload_Color = None 
+        # Motor_Control.Turn_Left/Right() -- want to just turn 180deg
         
-    if color == 'green': 
-        if '1' in barcode_id:
-            print("Color is green. ID is 1. Turn Right.")
-        elif '2' in barcode_id: 
-            print("Color is green. ID is 2. Keep Straight.")
-        elif '3' in barcode_id: 
-            print("Color is green. ID is 3. Turn Left.")       
-    
+    # barcode at loading station 
+    # is bypassed the first scan b/c no need to do anything when first payload is already picked up
+    elif '6' in self.ID: 
+        if scan_count > 1: 
+            # Payload_Detect()
+            # Payload_Manipulation.Bring_Up()
+            # Motor_Control.Turn_Left/Right() -- want to just turn 180deg
+            # Motor_Control.Move_Forward()
+        elif scan_count <= 1: 
+            pass 
     
 def Camera_Disable(camera):
     camera.close()
@@ -67,7 +121,7 @@ def Main(self):
     Camera_Disable(camera)
 
     self.ID = Barcode_Decode()
-    Instruction_Algorithm(self.Payload_Color, self.ID)
+    Instruction_Algorithm(self)
 
 
 if __name__ == '__main__':
