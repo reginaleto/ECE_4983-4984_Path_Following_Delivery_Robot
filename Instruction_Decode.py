@@ -30,7 +30,7 @@ def Barcode_Decode():
         # print(type(barcode_id)) # -- determine the type of the barcode ID *** 
         # print('\n' + barcode_id)
     
-    scan_count = scan_count + 1 
+    #scan_count = scan_count + 1 
     return barcode_id
     
 def Instruction_Algorithm( self ):
@@ -39,75 +39,97 @@ def Instruction_Algorithm( self ):
     if '16' in self.ID: # 16 b/c extra char at end of barcode
         if self.Payload_Color != None: 
             if self.Payload_Color == 'red':
+                print("red, left")
                 # Motor_Control.Turn_Left()
             elif self.Payload_Color == 'blue': 
+                print("blue, left")
                 # Motor_Control.Turn_Left()
             elif self.Payload_Color == 'green': 
                 # Motor_Control.Keep_Straight()
+                print("green, straight")
         elif self.Payload_Color == None: 
             if self.Previous_Color == 'green': 
+                print("reverse - green, straight")
                 # Motor_Control.Keep_Straight()
             if self.Previous_Color == 'red' or self.Previous_Color == 'blue': 
+                print("reverse - red and blue, right")
                 # Motor_Control.Turn_Right()
 
     # barcode labeled #2
     elif '2' in self.ID: 
         if self.Payload_Color != None: 
             if self.Payload_Color == 'red':
+                print("red, right")
                 # Motor_Control.Turn_Right()
             elif self.Payload_Color == 'blue': 
+                print("blue, right")
                 # Motor_Control.Turn_Right()
             elif self.Payload_Color == 'green': 
+                print("green, right")
                 # Motor_Control.Turn_Right()
         elif self.Payload_Color == None: 
+            print("reverse")
             # Motor_Control.Turn_Left()
                 
     # barcode labeled #3 
     elif '3' in self.ID: 
         if self.Payload_Color != None: 
             if self.Payload_Color == 'red':
+                print("red, left")
                 # Motor_Control.Turn_Left()
             elif self.Payload_Color == 'blue': 
+                print("blue, left")
                 # Motor_Control.Turn_Left()
             elif self.Payload_Color == 'green': 
                 # do nothing
                 pass
         elif self.Payload_Color == None: 
+            print("reverse")
                 # Motor_Control.Turn_Right()
                 
     # barcode labeled #4 -- intersection for blue and red          
     elif '4' in self.ID: 
         if self.Payload_Color != None: 
             if self.Payload_Color == 'red':
+                print("red, left")
                 # Motor_Control.Turn_Left()
             elif self.Payload_Color == 'blue': 
+                print("blue, right")
                 # Motor_Control.Turn_Right()
             elif self.Payload_Color == 'green': 
                 # do nothing
                 pass
         elif self.Payload_Color == None: 
                 if self.Previous_Color == 'blue': 
+                    print("reverse - blue, left")
                     # Motor_Control.Turn_Left()
                 elif self.Previous_Color == 'red': 
+                    print("reverse - red, right")
                     # Motor_Control.Turn_Right()
                 
     # barcode for dropping payload -- in front of each destination         
     elif '5' in self.ID: 
         # Payload_Manipulation.Bring_Down()
+        print("bringing payload down")
         self.Previous_Color = self.Payload_Color 
         self.Payload_Color = None 
+        print("left")
         # Motor_Control.Turn_Left/Right() -- want to just turn 180deg
         
     # barcode at loading station 
     # is bypassed the first scan b/c no need to do anything when first payload is already picked up
     elif '66' in self.ID: # 66 to decipher between barcodes 1 and 6
         if scan_count > 1: 
+            print("detect payload")
+            print("bringing payload up")
+            print("turn")
+            print("straight")
             # Payload_Detect()
             # Payload_Manipulation.Bring_Up()
             # Motor_Control.Turn_Left/Right() -- want to just turn 180deg
             # Motor_Control.Move_Forward()
-        elif scan_count <= 1: 
-            pass 
+"""         elif scan_count <= 1: 
+            pass  """
     
 def Camera_Disable(camera):
     camera.close()
