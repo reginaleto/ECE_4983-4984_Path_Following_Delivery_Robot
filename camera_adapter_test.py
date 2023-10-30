@@ -5,7 +5,7 @@ import threading
 import time
 import cv2
 
-from PyQt5.QtWidgets import QLabel, QHBoxLayout, QVBoxLayout, QApplication, QWidget ,QFormLayout,QDoubleSpinBox,QComboBox,QSlider,QPushButton,QSpinBox,QCheckBox
+from PyQt5.QtWidgets import QLabel, QHBoxLayout, QVBoxLayout, QApplication, QWidget 
 from picamera2 import Picamera2
 from PyQt5.QtGui import QImage,QPixmap
 from PyQt5.QtCore import QThread,Qt
@@ -14,21 +14,18 @@ width = 320
 height = 240
 
 camera_adapter_info = {  
+    # A is camera for barcodes (wide)
     "A" : {   
         "i2c_cmd":"i2cset -y 1 0x70 0x00 0x01",
         "gpio_sta":[0,0],
-    }, "B" : {
+    }, 
+    # B is camera for color detection (regular)
+    "B" : {
         "i2c_cmd":"i2cset -y 1 0x70 0x00 0x02",
         "gpio_sta":[1,0],
     }
 }
-
-""" GPIO.setMode(GPIO.BOARD)
-GPIO.setup(7, GPIO.OUT)
-GPIO.setup(11, GPIO.OUT)
-
- """
-
+ 
 class WorkThread(threading.Thread):
 
     def __init__(self):
@@ -37,6 +34,7 @@ class WorkThread(threading.Thread):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(7, GPIO.OUT)
         GPIO.setup(11, GPIO.OUT)
+        print("GPIO set")
 
     def select_channel(self,index):
         channel_info = camera_adapter_info.get(index)
@@ -45,10 +43,12 @@ class WorkThread(threading.Thread):
         gpio_sta = channel_info["gpio_sta"] # gpio write
         GPIO.output(7, gpio_sta[0])
         GPIO.output(11, gpio_sta[1])
+        print("channel selected")
 
     def init_i2c(self,index):
         channel_info = camera_adapter_info.get(index)
         os.system(channel_info["i2c_cmd"]) # i2c write
+        print("I2C initialized")
 
     def run(self):
         global camera_init
@@ -56,6 +56,7 @@ class WorkThread(threading.Thread):
         for item in {"A","B"}:
             try:
                 self.select_channel(item)
+                print("current index: " + item)
                 self.init_i2c(item)
                 time.sleep(0.5) 
                 # if flag == False:
