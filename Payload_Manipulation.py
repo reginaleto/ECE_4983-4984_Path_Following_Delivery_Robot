@@ -2,18 +2,19 @@ import RPi.GPIO as GPIO
 import time
 
 # Define pin numbers for Raspberry PI GPIO
-ENA_PIN = 32
-IN1_PIN = 11
-IN2_PIN = 21
+ENA_PIN = 19
+IN1_PIN = 5
+IN2_PIN = 6
 #LEFT_LIMIT_SWITCH_PIN = #?
 #RIGHT_LIMIT_SWITCH_PIN = #?
 
 
 def Motor_init():
-  GPIO.setmode(GPIO.BOARD)
+  GPIO.setmode(GPIO.BCM) # change to BCM -- find another pin for IN1 b/c 11 is used by cameras
+  # GPIO.setwarnings(False)
 
   # Initialize pins on the Motor Driver board for output
-  GPIO.setup(ENA_PIN, GPIO.OUT)
+  #GPIO.setup(ENA_PIN, GPIO.OUT)
   GPIO.setup(IN1_PIN, GPIO.OUT)
   GPIO.setup(IN2_PIN, GPIO.OUT)
 
@@ -21,30 +22,34 @@ def Motor_init():
 def Bring_Up():
    
    # Start upward movement for Linear Actuator
-   GPIO.output(ENA_PIN, GPIO.HIGH)
+   #GPIO.output(ENA_PIN, GPIO.HIGH)
 
    GPIO.output(IN1_PIN, GPIO.LOW)
    GPIO.output(IN2_PIN, GPIO.HIGH)
 
    # Run the motor for 10 seconds
-   time.sleep(4)
+   time.sleep(5)
+
+   GPIO.output(IN1_PIN, GPIO.LOW)
 
    #Stop the motor
-   GPIO.output(ENA_PIN, GPIO.LOW)
+   #GPIO.output(ENA_PIN, GPIO.LOW)
 
 
 def Bring_Down():
    
    #Start downward movement for Linear Actuator
-   GPIO.output(ENA_PIN, GPIO.HIGH)
+   #GPIO.output(ENA_PIN, GPIO.HIGH)
    GPIO.output(IN1_PIN, GPIO.HIGH)
    GPIO.output(IN2_PIN, GPIO.LOW)
 
    # Run the motor for 10 seconds
-   time.sleep(20)
+   time.sleep(5)
+
+   GPIO.output(IN1_PIN, GPIO.LOW)
 
    #Stop the motor
-   GPIO.output(ENA_PIN, GPIO.LOW)
+   #GPIO.output(ENA_PIN, GPIO.LOW)
 
    print("down")
 
@@ -72,7 +77,6 @@ def Main():
 
        # Test for bring_up and bring_down functions       
        #time.sleep(20)
-       Bring_Up()
        Bring_Down()
 
 
