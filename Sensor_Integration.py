@@ -1,20 +1,16 @@
-#import RPi.GPIO
+import RPi.GPIO as GPIO
+import time
 
+# returns True to indiciate that a barcode has been detected
+def Sensor_Output():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(27, GPIO.IN)
 
-def IR_Sensor_Read():
-    
-    
-def Reflectance_Sensor_Read():
-    
-    
-    
-def PID_Controller():
-    
-    
+    while True: 
+        if GPIO.input(27) == 1: 
+            break
 
-
-def Main(self):
-
+    return True
 
 if __name__ == '__main__':
-    Main()
+    Sensor_Output() 
