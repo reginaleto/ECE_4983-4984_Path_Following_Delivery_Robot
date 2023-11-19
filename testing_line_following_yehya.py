@@ -4,7 +4,7 @@ import time
 import serial 
 
 Kp = 1.5
-Ki = 1
+Ki = 0.5
 Kd = 0.5
 
 # left
@@ -106,7 +106,7 @@ def calc_PID(error):
 def calc_DutyCycle(Val_PID):
     global pwm_a, pwm_b
 
-    right_speed = 0
+    right_speed = 0 
     left_speed = 0
 
     right_speed = 50 + int(Val_PID) * 2
@@ -118,66 +118,47 @@ def calc_DutyCycle(Val_PID):
     pwm_a.ChangeDutyCycle(left_speed)
     pwm_b.ChangeDutyCycle(right_speed)
 
+
 def Main():
     global pwm_a, pwm_b
 
-    # ***New Error Idea****
-    motor_Init()
-    ser = serial.Serial('/dev/ttyACM0',9600, timeout=1)
+    try:
+        motor_Init()
+        ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+        ser.flush()
+        error_int = 0
 
-    ser.flush()
-    while True:
+        while True:
+            if ser.in_waiting > 0:
+                error = int(ser.readline().decode('utf-8').rstrip())
+                try:
+                    error_int = int(error)
+                    print("\n\nIncoming error value:", error_int)
+                    #val_PID = calc_PID(error_int)
+                    #calc_DutyCycle(val_PID)
+                except ValueError:
+                    print("Error value is not an integer:", error)
 
-        if ser.in_waiting>0:
-            #ser.flushInput()
-            error = ser.readline().decode('utf-8').rstrip() 
-            #error = int(error)
-            # error_int = int(error)
-            print("\n\nIncoming error value: ", error)
-
-        # "old" error inputting method
-        #print("Error in Motors: ", error)
-        val_PID = calc_PID(int(error))
-        calc_DutyCycle(val_PID)
-        # Move_forward()
-        time.sleep(1)
-        pwm_a.stop(0)
-        pwm_b.stop(0) 
-
-        time.sleep(0.01)  
+                pwm_a.ChangeDutyCycle(90)
+                pwm_b.ChangeDutyCycle(0)
 
 
-    """ if (error == 0):
-                print("moving forward")
-                Move_forward()
-            elif (error > 0):
-                print("turning right")
-                turn_right()
-            elif (error < 0):
-                print("turning left")
-                Turn_Left()
+                """ if (error_int == 0):
+                    Move_forward()
+                elif (error_int > 0):
+                    turn_right()
+                elif (error_int < 0):
+                    Turn_Left() """
 
+            time.sleep(5)
+            Move_forward()
             pwm_a.stop(0)
             pwm_b.stop(0)
- 
+        
 
-               
-             val_PID = calc_PID(error)
-            # calc_DutyCycle(val_PID)
-            # Move_forward()
-            time.sleep(2)
-            pwm_a.stop(0)
-            pwm_b.stop(0) 
-            time.sleep(0.1)  """
- 
-
-# if new error == old error
-#   keep speed the same 
-# if new error != old error
-#   change it
-
+    except serial.SerialException as e:
+        print(f"Serial connection error: {e}")
 
 
 if __name__ == '__main__':
     Main()
-

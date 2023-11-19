@@ -8,17 +8,21 @@ if __name__ == '__main__':
 
     ser.flush()
 
+    # Motors.motor_Init()
+
     while True:
         if ser.in_waiting>0:
+            #ser.flushInput()
             error = ser.readline().decode('utf-8').rstrip() 
-            # error = int(error)
-            error_int = int(error)
+            if error:
+                error_int = int(error)
+                print("Received Error from Arduino: ", error_int)
+            else:
+                print("Corrupt MEssage")
+            """ error_int = int(error)
+            #error_int = error
             print("Error in Serial: ", error_int)
-            Motors.Main(error_int)
+            # Motors.Main(error_int) """
 
-        """             print(type(error))
-                    print(error) 
-                    print(type(error_int))
-                    print(error_int)  """
 
 

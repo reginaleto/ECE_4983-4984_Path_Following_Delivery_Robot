@@ -24,8 +24,8 @@ def Bring_Up():
    # Start upward movement for Linear Actuator
    #GPIO.output(ENA_PIN, GPIO.HIGH)
 
-   GPIO.output(IN1_PIN, GPIO.LOW)
-   GPIO.output(IN2_PIN, GPIO.HIGH)
+   GPIO.output(IN1_PIN, GPIO.HIGH)
+   GPIO.output(IN2_PIN, GPIO.LOW)
 
    # Run the motor for 10 seconds
    time.sleep(5)
@@ -40,14 +40,13 @@ def Bring_Down():
    
    #Start downward movement for Linear Actuator
    #GPIO.output(ENA_PIN, GPIO.HIGH)
-   GPIO.output(IN1_PIN, GPIO.HIGH)
-   GPIO.output(IN2_PIN, GPIO.LOW)
+   GPIO.output(IN1_PIN, GPIO.LOW)
+   GPIO.output(IN2_PIN, GPIO.HIGH)
 
    # Run the motor for 10 seconds
    time.sleep(5)
-
    GPIO.output(IN1_PIN, GPIO.LOW)
-
+   
    #Stop the motor
    #GPIO.output(ENA_PIN, GPIO.LOW)
 

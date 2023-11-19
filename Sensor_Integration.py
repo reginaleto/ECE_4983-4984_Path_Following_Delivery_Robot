@@ -1,15 +1,16 @@
 import RPi.GPIO as GPIO
 import time
 
-# does not work with GPIO BCM connected to same number on HAT & GPIO pins
-
-def Main():
+# returns True to indiciate that a barcode has been detected
+def Sensor_Output():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(27, GPIO.IN)
 
     while True: 
-        print(GPIO.input(27))
-        time.sleep(0.5)
+        if GPIO.input(27) == 1: 
+            break
+
+    return True
 
 if __name__ == '__main__':
-    Main() 
+    Sensor_Output() 
