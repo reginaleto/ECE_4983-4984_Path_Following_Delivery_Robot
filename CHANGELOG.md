@@ -69,7 +69,7 @@ https://docs.github.com/en/get-started/writing-on-github/getting-started-with-wr
 * Confirm motors move with barcodes 1, 2, 3, and 4
 * Confirm threading method for line following and sensor integration within System.py
 
-## **Important Notes**
+### **Important Notes**
 * Streaming to be paused until further notice
     - Jesslyn unable to get camera working with Raspberry Pi Zero
     - Camera being used with Raspberry Pi Zero broke
