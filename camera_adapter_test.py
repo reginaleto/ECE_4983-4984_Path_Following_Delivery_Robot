@@ -4,6 +4,7 @@ import os
 import threading
 import time
 import cv2
+from libcamera import controls
 
 from PyQt5.QtWidgets import QLabel, QHBoxLayout, QVBoxLayout, QApplication, QWidget 
 from picamera2 import Picamera2
@@ -69,7 +70,7 @@ class WorkThread(threading.Thread):
                 # print(picam2.set_controls())
                 camera_init.configure(camera_init.create_still_configuration(main={"size": (320, 240),"format": "BGR888"},buffer_count=2)) 
                 camera_init.start()
-                camera_init.set_controls({"AeEnable":False,"ExposureTime":30000,"AnalogueGain":6})
+                camera_init.set_controls({"AfMode": controls.AfModeEnum.Continuous,"AeEnable":False,"ExposureTime":30000,"AnalogueGain":6})
                 time.sleep(2)
                 camera_init.capture_array("main",wait=True)
                 time.sleep(0.1)

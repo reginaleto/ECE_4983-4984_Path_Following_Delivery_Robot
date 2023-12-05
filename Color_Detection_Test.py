@@ -151,7 +151,11 @@ def color_detect(self):
                 else:
                     break """
 
-            print("Color Detected: ", self.Payload_Color)
+    print("Color Detected: ", self.Payload_Color)
+    camera_init.close()
+
+    return self.Payload_Color
+
 
 if __name__ == '__main__':
     color_detect()

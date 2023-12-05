@@ -3,8 +3,8 @@ import time
 
 # Define pin numbers for Raspberry PI GPIO
 ENA_PIN = 19
-IN1_PIN = 5
-IN2_PIN = 6
+IN1_PIN = 6
+IN2_PIN = 5
 #LEFT_LIMIT_SWITCH_PIN = #?
 #RIGHT_LIMIT_SWITCH_PIN = #?
 
@@ -30,7 +30,7 @@ def Bring_Up():
    # Run the motor for 10 seconds
    time.sleep(5)
 
-   GPIO.output(IN1_PIN, GPIO.LOW)
+   GPIO.output(IN1_PIN, GPIO.LOW) 
 
    #Stop the motor
    #GPIO.output(ENA_PIN, GPIO.LOW)
@@ -74,15 +74,12 @@ def Main():
     try:
        Motor_init()
 
-       # Test for bring_up and bring_down functions       
-       #time.sleep(20)
+       #Bring_Up()
        Bring_Down()
 
 
-       """ # Test the limit_switch_data functions
-       left_state, right_state = limit_switch_data_read()
-       print("Left Limit Switch State:", left_state)
-       print("Right Limit Switch State:", right_state) """
+
+
 
     except KeyboardInterrupt:
        GPIO.cleanup()

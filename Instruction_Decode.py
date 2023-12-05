@@ -49,12 +49,9 @@ def Camera_Enable(camera):
         camera.configure(camera.create_preview_configuration())
         camera.start(show_preview=True)
         camera.set_controls({"AfMode": controls.AfModeEnum.Continuous,"AeEnable":False,"ExposureTime":30000,"AnalogueGain":6})
-        time.sleep(1)
         camera.capture_array("main", wait=True)
-        camera.capture_file("/home/ginaleto/Desktop/Barcodes/Detected_Barcode.png")
 
 def Barcode_Decode():
-
     image = Image.open('/home/ginaleto/Desktop/Barcodes/Detected_Barcode.png')
     d = decode(image)
 
@@ -95,6 +92,7 @@ def Instruction_Algorithm( self ):
                 Motors.Turn_Right()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
+        return False
 
     # barcode labeled #2
     elif '2' in self.ID: 
@@ -119,46 +117,48 @@ def Instruction_Algorithm( self ):
             Motors.Turn_Left()
             time.sleep(1) # delay depends on weight
             Motors.Stop()
+        return False
                 
     # barcode labeled #3 
-    elif '3' in self.ID: 
-        if self.Payload_Color != None: 
-            if self.Payload_Color == 'red':
+    elif '3' in self.self.ID: 
+        if self.self.Payload_Color != None: 
+            if self.self.Payload_Color == 'red':
                 print("red, left")
                 Motors.Turn_Left()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
-            elif self.Payload_Color == 'blue': 
+            elif self.self.Payload_Color == 'blue': 
                 print("blue, left")
-                Motors.Turn_Left()
+                """ Motors.Turn_Left()
                 time.sleep(1) # delay depends on weight
-                Motors.Stop()
-            elif self.Payload_Color == 'green': 
+                Motors.Stop() """
+            elif self.self.Payload_Color == 'green': 
                 # do nothing
                 pass
-        elif self.Payload_Color == None: 
+        elif self.self.Payload_Color == None: 
             print("reverse")
             Motors.Turn_Right()
             time.sleep(1) # delay depends on weight
             Motors.Stop()
+        return False
                 
     # barcode labeled #4 -- intersection for blue and red          
     elif '4' in self.ID: 
-        if self.Payload_Color != None: 
-            if self.Payload_Color == 'red':
+        if self.self.Payload_Color != None: 
+            if self.self.Payload_Color == 'red':
                 print("red, left")
                 Motors.Turn_Left()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
-            elif self.Payload_Color == 'blue': 
+            elif self.self.Payload_Color == 'blue': 
                 print("blue, right")
                 Motors.Turn_Right()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
-            elif self.Payload_Color == 'green': 
+            elif self.self.Payload_Color == 'green': 
                 # do nothing
                 pass
-        elif self.Payload_Color == None: 
+        elif self.self.Payload_Color == None: 
                 if self.Previous_Color == 'blue': 
                     print("reverse - blue, left")
                     Motors.Turn_Left()
@@ -169,14 +169,15 @@ def Instruction_Algorithm( self ):
                     Motors.Turn_Right()
                     time.sleep(1) # delay depends on weight
                     Motors.Stop()
+        return False
                 
     # barcode for dropping payload -- in front of each destination         
     elif '5' in self.ID:
         Forklift.Motor_init() 
         Forklift.Bring_Down()
         print("bringing payload down")
-        self.Previous_Color = self.Payload_Color 
-        self.Payload_Color = None 
+        self.Previous_Color = self.self.Payload_Color 
+        self.self.Payload_Color = None 
         print("left")
         # heavier loads require longer time.sleep time 
         if self.Previous_Color == 'red':
@@ -189,11 +190,14 @@ def Instruction_Algorithm( self ):
             Motors.Turn_Left() # -- want to just turn 180deg
             time.sleep(1) # delay depends on weight 
         Motors.Stop()
+        return False
         
     # barcode at loading station 
     # is bypassed the first scan b/c no need to do anything when first payload is already picked up
     elif '6666' in self.ID: # 66 to decipher between barcodes 1 and 6
-        if scan_count >= 1: 
+        scan_count += 1
+        if scan_count >= 2:
+            return True     
             Motors.motor_Init()
             Motors.Move_forward()
             time.sleep(1)
@@ -207,17 +211,19 @@ def Instruction_Algorithm( self ):
                 time.sleep(1)
                 Motors.Stop()
                 # Motors.Move_forward() -- move into line following
-        else: 
+        elif scan_count <= 1: 
+            return False
             # if scan_count = 0, keep moving forward
             self.ID = None
             pass
-        scan_count += 1
-
-
 
 def Main(self):
-    Motors.Stop() # -- either here or Sensor_Integration for Reflectance Sensors
+    # Motors.Stop() # -- either here or Sensor_Integration for Reflectance Sensors
     global camera
+    
+    """ GPIO.setmode(GPIO.BCM)
+    GPIO.setup(4, GPIO.OUT) # camera A 
+    GPIO.setup(17, GPIO.OUT) # camera B  """
     
     for item in {"A", "B"}: 
         if item == "A": 
@@ -226,16 +232,22 @@ def Main(self):
             camera = Picamera2()
             time.sleep(0.5)
             Camera_Enable(camera)
+            time.sleep(5)
+            camera.capture_file("/home/ginaleto/Desktop/Barcodes/Detected_Barcode.png") 
             camera.stop_preview()
             camera.stop()
         else: 
             continue
 
     self.ID = Barcode_Decode()
-    Motors.motor_Init()
-    Instruction_Algorithm(self) 
+    print(self.ID)
+    # RestartFlag = Instruction_Algorithm(self) 
+
+    Instruction_Algorithm(self)
     # only perform turning instructions
     # in System.py, go back into line following
+
+    # return RestartFlag 
 
 if __name__ == '__main__':
     Main()

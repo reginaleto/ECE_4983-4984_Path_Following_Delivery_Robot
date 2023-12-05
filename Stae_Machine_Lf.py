@@ -9,8 +9,8 @@ Kd = 0.5
 
 # left
 ENA = 13
-IN1 = 21
-IN2 = 20
+IN1 = 20
+IN2 = 21
 
 # right
 ENB = 12
@@ -36,12 +36,13 @@ def motor_Init():
     GPIO.setup(IN1, GPIO.OUT)
     GPIO.setup(IN2, GPIO.OUT)
     pwm_a = GPIO.PWM(ENA,100)
-    pwm_a.start(0)
 
     GPIO.setup(ENB, GPIO.OUT)
     GPIO.setup(IN3, GPIO.OUT)
     GPIO.setup(IN4, GPIO.OUT) 
     pwm_b = GPIO.PWM(ENB,100)
+
+    pwm_a.start(0)
     pwm_b.start(0) 
 
 def Move_forward():
@@ -51,17 +52,33 @@ def Move_forward():
     GPIO.output(ENA, GPIO.HIGH)
     GPIO.output(IN1, GPIO.LOW)
     GPIO.output(IN2, GPIO.HIGH) 
-    pwm_a.ChangeDutyCycle(30)
-
+    
     GPIO.output(ENB, GPIO.HIGH)
     GPIO.output(IN3, GPIO.HIGH)
-    GPIO.output(IN4, GPIO.LOW) 
+    GPIO.output(IN4, GPIO.LOW)  
+
+    pwm_a.ChangeDutyCycle(90)
+    pwm_b.ChangeDutyCycle(90)
+
+    # time.sleep(5)
+
+
+def Move_Backward(): 
+    global ENA, IN1, IN2
+    global ENB, IN3, IN4
+
+    GPIO.output(ENA, GPIO.HIGH)
+    GPIO.output(IN1, GPIO.HIGH)
+    GPIO.output(IN2, GPIO.LOW) 
+    
+    GPIO.output(ENB, GPIO.HIGH)
+    GPIO.output(IN3, GPIO.LOW)
+    GPIO.output(IN4, GPIO.HIGH) 
+
+    pwm_a.ChangeDutyCycle(30)
     pwm_b.ChangeDutyCycle(30)
 
-    time.sleep(1.75)
-    Stop()
-
-def Turn_Left():
+def Turn_Right():
     GPIO.output(ENA, GPIO.LOW)
     GPIO.output(IN1, GPIO.LOW)
     GPIO.output(IN2, GPIO.LOW) 
@@ -70,14 +87,11 @@ def Turn_Left():
     GPIO.output(IN3, GPIO.HIGH)
     GPIO.output(IN4, GPIO.LOW)
 
-    #time.sleep(1)
-    #Stop()
-
-    pwm_a.ChangeDutyCycle(10)
-    pwm_b.ChangeDutyCycle() 
+    pwm_a.ChangeDutyCycle(0)
+    pwm_b.ChangeDutyCycle(35) 
 
 
-def Turn_Right():
+def Turn_Left():
     GPIO.output(ENA, GPIO.HIGH)
     GPIO.output(IN1, GPIO.LOW)
     GPIO.output(IN2, GPIO.HIGH) 
@@ -134,10 +148,12 @@ def calc_DutyCycle(Val_PID):
     pwm_b.ChangeDutyCycle(right_speed)
 
 
+
 def Line_Following():
     global pwm_a, pwm_b
 
     motor_Init()
+
     ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
     ser.flush()
     #error_int = 0
@@ -176,6 +192,11 @@ def Line_Following():
                 Turn_Left()
                 time.sleep(0.1)
             
-                
+def test():
+    motor_Init()
+    Move_forward()
+    time.sleep(3)
+    Stop()   
+             
 if __name__ == '__main__':
-    Line_Following()
+    test()
