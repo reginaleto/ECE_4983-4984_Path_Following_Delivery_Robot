@@ -73,22 +73,22 @@ def Instruction_Algorithm( self ):
                 Motors.Turn_Left()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
-            elif self.Payload_Color == 'blue': 
-                print("blue, left")
+            elif self.Payload_Color == 'green': 
+                print("green, left")
                 Motors.Turn_Left()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
-            elif self.Payload_Color == 'green':
-                print("green, straight")
+            elif self.Payload_Color == 'blue':
+                print("blue, straight")
                 # keep line following
                 pass
         elif self.Payload_Color == None: 
-            if self.Previous_Color == 'green': 
-                print("reverse - green, straight")
+            if self.Previous_Color == 'blue': 
+                print("reverse - blue, straight")
                 # keep line following
                 pass
-            if self.Previous_Color == 'red' or self.Previous_Color == 'blue': 
-                print("reverse - red and blue, right")
+            if self.Previous_Color == 'red' or self.Previous_Color == 'green': 
+                print("reverse - red and green, right")
                 Motors.Turn_Right()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
@@ -102,13 +102,13 @@ def Instruction_Algorithm( self ):
                 Motors.Turn_Right()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
-            elif self.Payload_Color == 'blue': 
-                print("blue, right")
+            elif self.Payload_Color == 'green': 
+                print("green, right")
                 Motors.Turn_Right()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
-            elif self.Payload_Color == 'green': 
-                print("green, right")
+            elif self.Payload_Color == 'blue': 
+                print("blue, right")
                 Motors.Turn_Right()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
@@ -120,22 +120,22 @@ def Instruction_Algorithm( self ):
         return False
                 
     # barcode labeled #3 
-    elif '3' in self.self.ID: 
-        if self.self.Payload_Color != None: 
-            if self.self.Payload_Color == 'red':
+    elif '3' in self.ID: 
+        if self.Payload_Color != None: 
+            if self.Payload_Color == 'red':
                 print("red, left")
                 Motors.Turn_Left()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
-            elif self.self.Payload_Color == 'blue': 
+            elif self.Payload_Color == 'blue': 
                 print("blue, left")
                 """ Motors.Turn_Left()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop() """
-            elif self.self.Payload_Color == 'green': 
+            elif self.Payload_Color == 'green': 
                 # do nothing
                 pass
-        elif self.self.Payload_Color == None: 
+        elif self.Payload_Color == None: 
             print("reverse")
             Motors.Turn_Right()
             time.sleep(1) # delay depends on weight
@@ -144,21 +144,21 @@ def Instruction_Algorithm( self ):
                 
     # barcode labeled #4 -- intersection for blue and red          
     elif '4' in self.ID: 
-        if self.self.Payload_Color != None: 
-            if self.self.Payload_Color == 'red':
+        if self.Payload_Color != None: 
+            if self.Payload_Color == 'red':
                 print("red, left")
                 Motors.Turn_Left()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
-            elif self.self.Payload_Color == 'blue': 
+            elif self.Payload_Color == 'blue': 
                 print("blue, right")
                 Motors.Turn_Right()
                 time.sleep(1) # delay depends on weight
                 Motors.Stop()
-            elif self.self.Payload_Color == 'green': 
+            elif self.Payload_Color == 'green': 
                 # do nothing
                 pass
-        elif self.self.Payload_Color == None: 
+        elif self.Payload_Color == None: 
                 if self.Previous_Color == 'blue': 
                     print("reverse - blue, left")
                     Motors.Turn_Left()
@@ -176,8 +176,8 @@ def Instruction_Algorithm( self ):
         Forklift.Motor_init() 
         Forklift.Bring_Down()
         print("bringing payload down")
-        self.Previous_Color = self.self.Payload_Color 
-        self.self.Payload_Color = None 
+        self.Previous_Color = self.Payload_Color 
+        self.Payload_Color = None 
         print("left")
         # heavier loads require longer time.sleep time 
         if self.Previous_Color == 'red':

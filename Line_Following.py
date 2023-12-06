@@ -101,6 +101,9 @@ def Error_Input(error_val):
             Stop()
             time.sleep(0.5) 
             Turn_Right(a, b)
+            time.sleep(0.2)
+            Stop()
+            time.sleep(0.2)
             Move_Forward()
             
         if error_val == -2: 

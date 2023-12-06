@@ -19,7 +19,7 @@ def Motor_init():
   GPIO.setup(IN2_PIN, GPIO.OUT)
 
  
-def Bring_Up():
+def Bring_Down():
    
    # Start upward movement for Linear Actuator
    #GPIO.output(ENA_PIN, GPIO.HIGH)
@@ -36,7 +36,7 @@ def Bring_Up():
    #GPIO.output(ENA_PIN, GPIO.LOW)
 
 
-def Bring_Down():
+def Bring_Up():
    
    #Start downward movement for Linear Actuator
    #GPIO.output(ENA_PIN, GPIO.HIGH)
@@ -45,12 +45,12 @@ def Bring_Down():
 
    # Run the motor for 10 seconds
    time.sleep(5)
-   GPIO.output(IN1_PIN, GPIO.LOW)
+   GPIO.output(IN2_PIN, GPIO.LOW)
    
    #Stop the motor
    #GPIO.output(ENA_PIN, GPIO.LOW)
 
-   print("down")
+   #print("down")
 
 
 

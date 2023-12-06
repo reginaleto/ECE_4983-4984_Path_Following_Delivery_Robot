@@ -32,9 +32,9 @@ class WorkThread(threading.Thread):
     def __init__(self):
         super(WorkThread,self).__init__()
         GPIO.setwarnings(False)
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(7, GPIO.OUT)
-        GPIO.setup(11, GPIO.OUT)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(4, GPIO.OUT)
+        GPIO.setup(17, GPIO.OUT)
         print("GPIO set")
 
     def select_channel(self,index):
@@ -42,8 +42,8 @@ class WorkThread(threading.Thread):
         if channel_info == None:
             print("Can't get this info")
         gpio_sta = channel_info["gpio_sta"] # gpio write
-        GPIO.output(7, gpio_sta[0])
-        GPIO.output(11, gpio_sta[1])
+        GPIO.output(4, gpio_sta[0])
+        GPIO.output(17, gpio_sta[1])
         print("channel selected")
 
     def init_i2c(self,index):

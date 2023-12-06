@@ -137,6 +137,8 @@ def color_detect(self):
             time.sleep(2)
             camera_init.capture_array("main",wait=True)
             time.sleep(0.1)
+
+            print("test")
             
             start_time = time.time()
             while time.time() - start_time < duration:

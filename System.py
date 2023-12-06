@@ -66,7 +66,7 @@ class System():
                 # stop motors if IR sensor detects barcode
                 if IRBarcodeFlag == True: 
                     Motors.Stop()
-                    RestartFlag = Instruction_Decode.Main(self)
+                    RestartFlag = Barcode_Detection.Main(self)
                     # break out of inner WHILE loop if loading station barcode was scanned
                     # keep looping if any other barcode is detected
                     if RestartFlag == True:   
@@ -79,10 +79,9 @@ class System():
         self.Payload_Color = Payload_Detect.color_detect(self) 
         print(self.Payload_Color)
         
-
         Motors.motor_Init()
         Motors.Move_forward()
-        time.sleep(2.5)
+        time.sleep(1.5)
         Motors.Stop()
         time.sleep(0.5)
 
@@ -92,7 +91,8 @@ class System():
         time.sleep(1)
 
         barcode_detection = threading.Thread(target=IRSensor.Sensor_Output)
-        line_following = threading.Thread(target = Motors.Move_forward)
+        line_following = threading.Thread(target = Motors.Line_Following)
+        
         barcode_detection.start()
         line_following.start() # thread is finished when barcode is detected in path
         
@@ -101,36 +101,44 @@ class System():
         while barcode_detection.is_alive(): 
             barcode_detection.join(timeout=0.5) 
         
-        
         Barcode_Detection.Main(self)
         Forklift.Bring_Down()
 
-        # Motors.Stop()
-        # Barcode_Detect.Main(self)
-
-
-        # Payload_Detect.color_detect(self)
-        # print("self.Payload_Color: ", self.Payload_Color) 
-
-        
-"""         Motors.motor_Init()
-        Motors.Move_forward()
-        time.sleep(0.7)
-        Motors.Stop()
-        time.sleep(1)
-        Forklift.Motor_init()
-        Forklift.Bring_Up()
-        Motors.Move_forward()
-        time.sleep(10)
-        Motors.Stop()
-        Forklift.Bring_Down()
-        Motors.Move_Backward() """
-        
-
-
-
+    def Payload_Test(self):
+        self.Payload_Color = Payload_Detect.color_detect(self)
+        print(self.Payload_Color)
 
 system_test = System()
-system_test.Main()
+# system_test.Main()
+system_test.Payload_Test()
+# system_test.Barcode_Test()
 # system_test.Path_Following_Delivery_Sequence()
     
+
+
+        # while running:
+            # color detect
+            # pick up payload
+
+            # start motors
+            # do line following thread
+            # do barcode detection thread
+            # while barcode_detection is running: 
+                # when barcode has been detected:
+                    # break out of barcode_detection.is_alive loop 
+                    # start barcode detection
+                    # have barcode detection do whatever it 
+                    # needs to with motors
+
+                    # go back to line following/barcode detection threads
+                    # repeat until unloading station
+                    # break out of thread loops 
+
+            # drop payload 
+            # repeat line following & barcode detection until back at
+            # loading station 
+            # repeat while True loop
+
+
+
+

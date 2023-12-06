@@ -50,15 +50,17 @@ def Move_forward():
     global ENB, IN3, IN4
 
     GPIO.output(ENA, GPIO.HIGH)
-    GPIO.output(IN1, GPIO.LOW)
-    GPIO.output(IN2, GPIO.HIGH) 
+    GPIO.output(IN1, GPIO.HIGH)
+    GPIO.output(IN2, GPIO.LOW) 
     
     GPIO.output(ENB, GPIO.HIGH)
     GPIO.output(IN3, GPIO.HIGH)
     GPIO.output(IN4, GPIO.LOW)  
 
-    pwm_a.ChangeDutyCycle(90)
-    pwm_b.ChangeDutyCycle(90)
+    pwm_a.ChangeDutyCycle(30)
+    pwm_b.ChangeDutyCycle(30)
+
+    # drop PWMA by 1.6
 
     # time.sleep(5)
 
@@ -78,7 +80,7 @@ def Move_Backward():
     pwm_a.ChangeDutyCycle(30)
     pwm_b.ChangeDutyCycle(30)
 
-def Turn_Right():
+def Turn_Right(a_dutyCycle, b_dutyCycle):
     GPIO.output(ENA, GPIO.LOW)
     GPIO.output(IN1, GPIO.LOW)
     GPIO.output(IN2, GPIO.LOW) 
@@ -87,11 +89,11 @@ def Turn_Right():
     GPIO.output(IN3, GPIO.HIGH)
     GPIO.output(IN4, GPIO.LOW)
 
-    pwm_a.ChangeDutyCycle(0)
-    pwm_b.ChangeDutyCycle(35) 
+    pwm_a.ChangeDutyCycle(a_dutyCycle)
+    pwm_b.ChangeDutyCycle(b_dutyCycle) 
 
 
-def Turn_Left():
+def Turn_Left(a_dutyCycle, b_dutyCycle):
     GPIO.output(ENA, GPIO.HIGH)
     GPIO.output(IN1, GPIO.LOW)
     GPIO.output(IN2, GPIO.HIGH) 
@@ -100,8 +102,8 @@ def Turn_Left():
     GPIO.output(IN3, GPIO.LOW)
     GPIO.output(IN4, GPIO.LOW)
 
-    pwm_a.ChangeDutyCycle(35)
-    pwm_b.ChangeDutyCycle(0) 
+    pwm_a.ChangeDutyCycle(a_dutyCycle)
+    pwm_b.ChangeDutyCycle(b_dutyCycle)  
 
 def Stop():
     GPIO.output(ENA, GPIO.HIGH)
@@ -148,11 +150,70 @@ def calc_DutyCycle(Val_PID):
     pwm_b.ChangeDutyCycle(right_speed)
 
 
+def Error_Input(error_val): 
+
+    if error_val != 0: 
+        if error_val == -3: 
+            Stop()
+            time.sleep(0.5) 
+            Turn_Right(40, 20)
+            time.sleep(0.2)
+            Stop()
+            time.sleep(0.2)
+            Move_forward()
+            
+        if error_val == -2: 
+            Stop()
+            time.sleep(0.5) 
+            Turn_Right(35, 25)
+            time.sleep(0.2)
+            Stop()
+            time.sleep(0.2)
+            Move_forward()
+
+        if error_val == -1: 
+            Stop()
+            time.sleep(0.5) 
+            Turn_Right(38, 28)
+            Move_forward()
+
+        if error_val == 1: 
+            Stop()
+            time.sleep(0.5) 
+            Turn_Left(28, 38)
+            time.sleep(0.2)
+            Stop()
+            time.sleep(0.2)
+            Move_forward()
+
+        if error_val == 2: 
+            Stop()
+            time.sleep(0.5) 
+            Turn_Left(26, 35)
+            time.sleep(0.2)
+            Stop()
+            time.sleep(0.2)
+            Move_forward()
+
+        if error_val == 3: 
+            Stop()
+            time.sleep(0.5) 
+            Turn_Left(20, 40)
+            time.sleep(0.2)
+            Stop()
+            time.sleep(0.2)
+            Move_forward()
+        
+        if error_val == -4 or error_val == 4: 
+            Stop()
+
+    elif error_val == 0: 
+        Move_forward()
+    
+
 
 def Line_Following():
     global pwm_a, pwm_b
-
-    motor_Init()
 
     ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
     ser.flush()
@@ -163,40 +224,18 @@ def Line_Following():
             try:
                 error_int = error
                 print("\n\nIncoming error value:", error_int)
+                Error_Input(error_int)
                 #val_PID = calc_PID(error_int)
                 #calc_DutyCycle(val_PID)
             except ValueError:
                 print("Error value is not an integer:", error)
 
-
-            if (error_int == 0):
-                Move_forward()
-
-            if (error_int == 1):
-                Turn_Right()
-                time.sleep(0.1)
-            if (error_int == 2):
-                Turn_Right()
-                time.sleep(0.1)
-            if (error_int == 4):
-                Turn_Right()
-                time.sleep(0.1)
-
-            if (error_int == -1):
-                Turn_Left()
-                time.sleep(0.01)
-            if (error_int == -2):
-                Turn_Left()
-                time.sleep(0.1)
-            if (error_int == -4):
-                Turn_Left()
-                time.sleep(0.1)
             
 def test():
     motor_Init()
     Move_forward()
-    time.sleep(3)
+    time.sleep(10)
     Stop()   
              
 if __name__ == '__main__':
-    test()
+    Line_Following()
